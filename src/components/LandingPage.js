@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
 
 
 export default function LandingPage() {
@@ -8,19 +9,19 @@ export default function LandingPage() {
     const[carbs, setCarbs] = useState('')
     const[fat, setFat] = useState('')
     const[protein, setProtein] = useState('')
-    const[meme, setMeme] = useState('')
+    const[inputText, setInputText] = useState('')
     
-    useEffect(()=>{console.log(meme)}, [meme])
+    useEffect(()=>{console.log(inputText)}, [inputText])
 
-    const changeCalories = (event) => {
+    const changeCaloriesHandler = (event) => {
         setCalories(event.target.value)
-        setMeme(event.target.value)
+        setInputText(event.target.value)
     }
 
     
-    const changeCarbs = (event) => {
+    const changeCarbsHandler = (event) => {
         setCarbs(event.target.value)
-        setMeme(event.target.value)
+        setInputText(event.target.value)
 
         // setCarbs((prevState)=>{
         //     return event.target.value
@@ -35,46 +36,47 @@ export default function LandingPage() {
             // });
     }
 
-    const changeFat = (event) => {
+    const changeFatHandler = (event) => {
         setFat(event.target.value)
-        setMeme(event.target.value)
+        setInputText(event.target.value)
 
     }
 
-    const changeProtein = (event) => {
+    const changeProteinHandler = (event) => {
         setProtein(event.target.value)
-        setMeme(event.target.value)
+        setInputText(event.target.value)
     }
 
     return(
-    <form>
-        <label>Calories</label>
-        <input type='text' onChange={changeCalories}></input>
-        <input type='submit'></input>
-        {/*<TextField id="calories-input" label="Calories" variant="outlined" />
-                <TextField id="carbs-input" label="Carbs" variant="outlined" />
-                <TextField id="fat-input" label="Fat" variant="outlined" />
-                <TextField id="protein-input" label="Protein" variant="outlined" />*/}
+        <div>
+            <h1>
+                Enter In Your Target Calories And Macros
+            </h1>
+            <Box
+                component="form"
+                sx={{
+                    '& > :not(style)': { m: 1, width: '25ch' },
+                }}
+                noValidate
+                autoComplete="off"
+            >
+                <div>
+                    <TextField id="calories-input" label="Calories" variant="outlined" onChange={changeCaloriesHandler}/>
+                </div>
+                <div>
+                    <TextField id="carbs-input" label="Carbs" variant="outlined" onChange={changeCarbsHandler}/>
+                </div>
+                <div>
+                    <TextField id="fat-input" label="Fat" variant="outlined" onChange={changeFatHandler}/>
+                </div>
+                <div>
+                    <TextField id="protein-input" label="Protein" variant="outlined" onChange={changeProteinHandler}/>
+                </div>
 
-        <label>Carbs</label>
-        <input type='text' onChange={changeCarbs}></input>
-        <input type='submit'></input>
-        <label>Fat</label>
-        <input type='text' onChange={changeFat}></input>
-        <input type='submit'></input>
-        <label>Protein</label>
-        <input type='text' onChange={changeProtein}></input>
-        <input type='submit'></input>
-    </form>
-            // <Box
-            //     component="form"
-            //     sx={{
-            //         '& > :not(style)': { m: 1, width: '25ch' },
-            //     }}
-            //     noValidate
-            //     autoComplete="off"
-            // >
-
-            // </Box>
+            </Box>
+            <Button>
+                
+            </Button>
+        </div>
     )
 }
