@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
-import './PlanningPage.css'
+import './PlanningPage.css';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
@@ -34,7 +34,6 @@ const PlanningPage = () => {
         }
       )
       .then(function (res) {
-        console.log(res);
         setFoodComponents((prevFoods) => {
           return [
             ...prevFoods,
@@ -44,6 +43,7 @@ const PlanningPage = () => {
               protein={res.data.totalNutrients.PROCNT.quantity}
               carbs={res.data.totalNutrients.CHOCDF.quantity}
               fat={res.data.totalNutrients.FAT.quantity}
+              deleteHandler={clickDeleteHandler}
             ></Food>,
           ];
         });
@@ -51,8 +51,25 @@ const PlanningPage = () => {
       .catch(function (error) {
         console.log(error);
       });
-      console.log(res);
   };
+
+  const clickDeleteHandler = (foodName) => {
+      console.log(foodComponents + 'outside')
+    setFoodComponents(foodComponents.filter((component) => {
+      console.log(foodComponents + 'inside')
+     return component.props.name !== foodName}))
+  }
+
+  // function clickDeleteHandler(foodName) {
+  //   'use strict';
+  //   console.log(foodComponents + 'outside');
+  //   setFoodComponents(
+  //     foodComponents.filter((component) => {
+  //   console.log(foodComponents + 'inside')
+  //       return component.props.name !== foodName;
+  //     })
+  //   );
+  // }
 
   const foodInputHandler = async (event) => {
     setInputText(event.target.value);
@@ -71,6 +88,10 @@ const PlanningPage = () => {
     setFoods(functionFoods);
   };
 
+  const autoCompleteHandler = (event, value) => {
+    setInputText(value.name);
+  };
+
   return (
     <div>
       <h1>PlanningPage</h1>
@@ -80,6 +101,7 @@ const PlanningPage = () => {
       <div style={{ background: 'white', padding: '2rem' }}>
         <Autocomplete
           id='foods-autocomplete'
+          onChange={autoCompleteHandler}
           options={foods}
           renderInput={(params) => (
             <TextField
@@ -99,7 +121,9 @@ const PlanningPage = () => {
           Add
         </Button>
       </div>
-      <div id='food-list' className='food-list'>LIST {foodComponents}</div>
+      <div id='food-list' className='food-list'>
+        LIST {foodComponents}
+      </div>
     </div>
   );
 };
