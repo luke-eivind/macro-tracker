@@ -6,6 +6,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 import Food from './Food';
 import axios from 'axios';
+import FoodList from './FoodList';
 
 const PlanningPage = () => {
   const [foods, setFoods] = useState([]);
@@ -18,6 +19,7 @@ const PlanningPage = () => {
       inputText +
       '&nutrition-type=cooking&limit=3';
     let res = await axios.get(requestUrl);
+    const img = res.data.parsed[0].food.image;
 
     axios
       .post(
@@ -38,7 +40,8 @@ const PlanningPage = () => {
           return [
             ...prevFoods,
             <Food
-              name={res.data.ingredients[0].parsed[0].food.toUpperCase()}
+              img={img}
+              name={res.data.ingredients[0].parsed[0].food.toLowerCase()}
               calories={res.data.totalNutrients.ENERC_KCAL.quantity}
               protein={res.data.totalNutrients.PROCNT.quantity}
               carbs={res.data.totalNutrients.CHOCDF.quantity}
@@ -54,11 +57,14 @@ const PlanningPage = () => {
   };
 
   const clickDeleteHandler = (foodName) => {
-      console.log(foodComponents + 'outside')
-    setFoodComponents(foodComponents.filter((component) => {
-      console.log(foodComponents + 'inside')
-     return component.props.name !== foodName}))
-  }
+    console.log(foodComponents + 'outside');
+    setFoodComponents(
+      foodComponents.filter((component) => {
+        console.log(foodComponents + 'inside');
+        return component.props.name !== foodName;
+      })
+    );
+  };
 
   // function clickDeleteHandler(foodName) {
   //   'use strict';
@@ -95,10 +101,13 @@ const PlanningPage = () => {
   return (
     <div>
       <h1>PlanningPage</h1>
-      <nav>
-        <Link to='/'>Landing</Link>
-      </nav>
-      <div style={{ background: 'white', padding: '2rem' }}>
+      <div
+        className='input-box card'
+        style={{ background: 'white', padding: '2rem' }}
+      >
+        <nav>
+          <Link to='/'>Landing</Link>
+        </nav>
         <Autocomplete
           id='foods-autocomplete'
           onChange={autoCompleteHandler}
@@ -121,9 +130,7 @@ const PlanningPage = () => {
           Add
         </Button>
       </div>
-      <div id='food-list' className='food-list'>
-        LIST {foodComponents}
-      </div>
+      <FoodList components={foodComponents}></FoodList>
     </div>
   );
 };

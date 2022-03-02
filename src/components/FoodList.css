@@ -1,0 +1,9 @@
+.food-list {
+  max-width: 40%;
+  margin: 3rem auto;
+  padding: 0.5rem;
+  background-color: grey;
+  border-radius: 3rem;
+  box-shadow: 0.5rem 0.5rem 0.5rem;
+  outline: 0.5rem solid;
+}
