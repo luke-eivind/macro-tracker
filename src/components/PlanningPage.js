@@ -12,6 +12,10 @@ const PlanningPage = () => {
   const [foods, setFoods] = useState([]);
   const [inputText, setInputText] = useState('');
   const [foodComponents, setFoodComponents] = useState([]);
+  const [foodQuantities, setFoodQuantities] = useState([]);
+
+  
+  
 
   const buttonClickHandler = async () => {
     const requestUrl =
@@ -20,7 +24,6 @@ const PlanningPage = () => {
       '&nutrition-type=cooking&limit=3';
     let res = await axios.get(requestUrl);
     const img = res.data.parsed[0].food.image;
-
     axios
       .post(
         'https://api.edamam.com/api/food-database/v2/nutrients?app_id=b295d5ab&app_key=423589a8b37bf61dcb13f405c1fb5e66',
@@ -29,7 +32,7 @@ const PlanningPage = () => {
             {
               quantity: 1,
               measureURI:
-                'http://www.edamam.com/ontologies/edamam.owl#Measure_serving',
+                'http://www.edamam.com/ontologies/edamam.owl#Measure_gram',
               foodId: res.data.parsed[0].food.foodId,
             },
           ],
@@ -50,6 +53,9 @@ const PlanningPage = () => {
             ></Food>,
           ];
         });
+        setFoodQuantities((prevQuantities) => {
+          return [...prevQuantities, {name: res.data.ingredients[0].parsed[0].food.toLowerCase(), quantity: 100 }]
+        })
       })
       .catch(function (error) {
         console.log(error);
@@ -57,25 +63,18 @@ const PlanningPage = () => {
   };
 
   const clickDeleteHandler = (foodName) => {
-    console.log(foodComponents + 'outside');
-    setFoodComponents(
-      foodComponents.filter((component) => {
-        console.log(foodComponents + 'inside');
+    setFoodComponents((prevComponents) =>{
+      return prevComponents.filter((component) => {
         return component.props.name !== foodName;
       })
+    }
     );
-  };
-
-  // function clickDeleteHandler(foodName) {
-  //   'use strict';
-  //   console.log(foodComponents + 'outside');
-  //   setFoodComponents(
-  //     foodComponents.filter((component) => {
-  //   console.log(foodComponents + 'inside')
-  //       return component.props.name !== foodName;
-  //     })
-  //   );
-  // }
+    setFoodQuantities((prevQuantities) => {
+     return prevQuantities.filter((quantity) => {
+        return quantity.name !== foodName;
+      })
+    })
+  }
 
   const foodInputHandler = async (event) => {
     setInputText(event.target.value);

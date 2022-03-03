@@ -2,9 +2,6 @@ import './FoodList.css';
 import Button from '@mui/material/Button';
 
 const FoodList = (props) => {
-  const clickHandler = () => {
-    props.deleteHandler(props.name);
-  };
 
   return (
     <div className="food-list">
