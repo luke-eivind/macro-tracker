@@ -16,7 +16,7 @@ const PlanningPage = () => {
 
   
   
-
+  //handler for clicking the add button on the planning page
   const buttonClickHandler = async () => {
     const requestUrl =
       'https://api.edamam.com/api/food-database/v2/parser?app_id=b295d5ab&app_key=423589a8b37bf61dcb13f405c1fb5e66&ingr=' +
@@ -62,6 +62,7 @@ const PlanningPage = () => {
       });
   };
 
+  //handler for clicking the delete button on a food row.  This function reference is passed as a prop to the food component
   const clickDeleteHandler = (foodName) => {
     setFoodComponents((prevComponents) =>{
       return prevComponents.filter((component) => {
@@ -76,6 +77,7 @@ const PlanningPage = () => {
     })
   }
 
+  //handler that gets called every time the content of the food input box is changed.  Calls the autocomplete api.
   const foodInputHandler = async (event) => {
     setInputText(event.target.value);
     const requestUrl =
