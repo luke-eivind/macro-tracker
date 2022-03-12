@@ -8,9 +8,10 @@ export default class FoodObject {
     protein,
     quantity,
     name,
+    id,
     img,
     clickDeleteHandler,
-    clickUpHandler
+    updateQuantityHandler
   ) {
     this.calories = calories;
     this.carbs = carbs;
@@ -18,9 +19,10 @@ export default class FoodObject {
     this.protein = protein;
     this.quantity = quantity;
     this.name = name;
+    this.id = id
     this.img = img;
     this.clickDeleteHandler = clickDeleteHandler;
-    this.clickUpHandler = clickUpHandler;
+    this.updateQuantityHandler = updateQuantityHandler;
   }
 
   get totalCalories() {
@@ -47,14 +49,16 @@ export default class FoodObject {
   get component() {
     return (
       <Food
+      quantity={this.quantity}
         img={this.img}
         name={this.name}
+        id={this.id}
         calories={this.totalCalories.toFixed(2)}
         protein={this.totalProtein.toFixed(2)}
         carbs={this.totalCarbs.toFixed(2)}
         fat={this.totalFat.toFixed(2)}
         deleteHandler={this.clickDeleteHandler}
-        clickUpHandler={this.clickUpHandler}
+        updateQuantityHandler={this.updateQuantityHandler}
       ></Food>
     );
   }
