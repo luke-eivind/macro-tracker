@@ -134,7 +134,7 @@ export default function LandingPage(props) {
 
   return (
     <div>
-      <h1>Enter In Your Target Calories And Macros</h1>
+      <h1>Macro Tracker</h1>
       <div class='card'>
         <Box
           component='form'

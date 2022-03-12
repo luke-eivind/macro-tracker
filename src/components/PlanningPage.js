@@ -51,7 +51,6 @@ const PlanningPage = (props) => {
     });
   }, [foodObjects]);
 
-  
   const clickAddHandler = async () => {
     const requestUrl =
       'https://api.edamam.com/api/food-database/v2/parser?app_id=b295d5ab&app_key=423589a8b37bf61dcb13f405c1fb5e66&ingr=' +
@@ -155,28 +154,65 @@ const PlanningPage = (props) => {
       fat = 0;
 
     while (carbs < props.carbs || protein < props.protein || fat < props.fat) {
-
       tempFoodObjects.map((e) => {
         carbs += e.carbs * e.serving;
         protein += e.protein * e.serving;
         fat += e.fat * e.serving;
         e.quantity += e.serving;
-        return e
+        return e;
       });
 
-      let carbsCompleted = carbs / props.carbs
-      let proteinCompleted = protein / props.protein
-      let fatCompleted = fat / props.fat
+      let carbsCompleted = carbs / props.carbs;
+      let proteinCompleted = protein / props.protein;
+      let fatCompleted = fat / props.fat;
 
-      if((carbsCompleted >= .9 || proteinCompleted >= .9 || fatCompleted >= .9) && (carbsCompleted <= .7 || proteinCompleted <= .7 || fatCompleted <= .7)){
-        
+      if (
+        carbsCompleted >= 0.9 &&
+        (proteinCompleted <= 0.7 || fatCompleted <= 0.7)
+      ) {
+        let meme = tempFoodObjects.reduce((p, c) => {
+          if (p.carbs > c.carbs) {
+            return p;
+          } else {
+            return c;
+          }
+        });
+
+        meme.serving = 0;
       }
+      if (
+        proteinCompleted >= 0.9 &&
+        (carbsCompleted <= 0.7 || fatCompleted <= 0.7)
+      ) {
+        let meme = tempFoodObjects.reduce((p, c) => {
+          if (p.protein > c.protein) {
+            return p;
+          } else {
+            return c;
+          }
+        });
 
+        meme.serving = 0;
+      }
+      if (
+        fatCompleted >= 0.9 &&
+        (carbsCompleted <= 0.7 || proteinCompleted <= 0.7)
+      ) {
+        let meme = tempFoodObjects.reduce((p, c) => {
+          if (p.fat > c.fat) {
+            return p;
+          } else {
+            return c;
+          }
+        });
+
+        meme.serving = 0;
+      }
     }
 
     setFoodObjects((prevObjects) => {
       return prevObjects.map((e, i) => {
-        e.quantity = tempFoodObjects[i].quantity
+        e.quantity = tempFoodObjects[i].quantity;
         return e;
       });
     });
@@ -226,16 +262,11 @@ const PlanningPage = (props) => {
 
   return (
     <div>
-      <h1>PlanningPage</h1>
-      <nav style={{ margin: '2rem' }}>
-        <Link to='/'>Landing</Link>
-      </nav>
-      <div
-        className='input-box card'
-        style={{ background: 'white', padding: '2rem' }}
-      >
+      <h1>Macro Tracker</h1>
+      <div className='input-box card'>
         <Autocomplete
           id='foods-autocomplete'
+          className='auto'
           onChange={autoCompleteHandler}
           options={foods}
           renderInput={(params) => (
@@ -250,17 +281,38 @@ const PlanningPage = (props) => {
           style={{ width: 270 }}
         />
         <Button
-          style={{ margin: '10px auto', padding: '2rem' }}
+          style={{
+            background: 'orange',
+            outline: '1px solid #000',
+            margin: '10px',
+            padding: '2rem',
+          }}
           onClick={clickAddHandler}
         >
           Add
         </Button>
         <Button
-          style={{ margin: '10px auto', padding: '2rem' }}
+          style={{
+            background: 'orange',
+            outline: '1px solid #000',
+            margin: '10px',
+            padding: '2rem',
+          }}
           onClick={clickCalculateHandler}
         >
           Calculate
         </Button>
+        <Button
+          style={{
+            background: 'orange',
+            outline: '1px solid #000',
+            margin: '10px',
+            padding: '2rem',
+          }}
+        >
+          <Link to='/'>Back</Link>
+        </Button>
+        
       </div>
       <FoodList components={foodObjects.map((c) => c.component)}></FoodList>
       <div className='card' style={{ padding: '2rem' }}>

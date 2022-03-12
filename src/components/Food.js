@@ -13,7 +13,7 @@ const Food = (props) => {
 
   return (
     <div className='food-item card'>
-      <TextField className='number-input' value={props.quantity} type='number' defaultValue='100' onChange={updateQuantityHandler} />
+      <TextField className='number-input' value={props.quantity.toFixed(2)} type='number' defaultValue='100' onChange={updateQuantityHandler} />
       <img src={props.img} />
       &nbsp;&nbsp;
       <b>Name:</b> &nbsp;{props.name}&nbsp;&nbsp;
