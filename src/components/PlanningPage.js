@@ -231,7 +231,7 @@ const PlanningPage = (props) => {
     setFoodObjects((prevObjects) => {
       return prevObjects.map((e) => {
         if (e.name === foodName) {
-          e.quantity = quantity;
+          e.quantity = Number(quantity);
         }
         return e;
       });

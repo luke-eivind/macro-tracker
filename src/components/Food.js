@@ -10,6 +10,7 @@ const Food = (props) => {
   const updateQuantityHandler = (e) => {
     props.updateQuantityHandler(props.name, e.target.value);
   }
+  
 
   return (
     <div className='food-item card'>
