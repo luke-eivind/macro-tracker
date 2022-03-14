@@ -218,6 +218,175 @@ const PlanningPage = (props) => {
     });
   };
 
+  //alternate algorithm for calculating 
+  const clickCalculateHandler2 = async () => {
+    console.log('handler2')
+    let tempFoodObjects = [];
+
+    foodObjects.forEach((e) => {
+      tempFoodObjects.push({
+        name: e.name, //just added this for testing 
+        carbs: e.carbs,
+        protein: e.protein,
+        fat: e.fat,
+        id: e.id,
+        quantity: 0,
+        serving: 999,
+      });
+    });
+
+    let sum = 0; //sum of serving sizes (grams) for all foods
+
+    //get serving data
+    await Promise.all(
+      tempFoodObjects.map(async (e) => {
+        await axios
+          .post(
+            'https://api.edamam.com/api/food-database/v2/nutrients?app_id=b295d5ab&app_key=423589a8b37bf61dcb13f405c1fb5e66',
+            {
+              ingredients: [
+                {
+                  quantity: 1,
+                  measureURI:
+                    'http://www.edamam.com/ontologies/edamam.owl#Measure_serving',
+                  foodId: e.id,
+                },
+              ],
+            }
+          )
+          .then((res) => {
+            if (
+              res.data.ingredients[0].parsed[0].status === 'MISSING_QUANTITY'
+            ) {
+              console.log('no serving');
+              e.serving = 100;
+              sum += 100;
+            } else {
+              console.log('serving');
+              e.serving = res.data.totalWeight;
+              sum += res.data.totalWeight;
+            }
+          });
+        return e;
+      })
+    );
+
+    tempFoodObjects.map((e) => {
+      e.serving = e.serving / sum;
+      return e;
+    });
+
+    let carbs = 0,
+      protein = 0,
+      fat = 0;
+
+    while (carbs < props.carbs || protein < props.protein || fat < props.fat) {
+      let carbsNeeded = props.carbs - carbs
+      let proteinNeeded = Number(props.protein - protein)
+      let fatNeeded = props.fat - fat
+
+      //console.log(carbsNeeded + '(carbs) ' + proteinNeeded + '(protein) ' + fatNeeded)
+      if(carbsNeeded >= proteinNeeded && carbsNeeded >= fatNeeded){
+        let carbHeavyFoods = tempFoodObjects.filter((e) => {
+          return e.carbs/(e.carbs + e.protein + e.fat) >= .3
+        })
+
+        //identify the carb heavy food with the lowest current quantity
+        let lowestQuantity, lowestQuantityFood
+        carbHeavyFoods.forEach((e, i) => {
+          if(i == 0){
+            lowestQuantity = e.quantity
+            lowestQuantityFood = e.id
+          }
+          else{
+            if(e.quantity < lowestQuantity){
+              lowestQuantity = e.quantity
+              lowestQuantityFood = e.id
+            }
+          }
+        })
+        console.log(proteinNeeded + ' 2')
+        tempFoodObjects.map((e) => {
+          if(e.id == lowestQuantityFood){
+            e.quantity++
+            carbs += e.carbs
+            protein += e.protein
+            fat += e.fat
+          }
+        })
+      }
+
+      else if(proteinNeeded >= carbsNeeded && proteinNeeded >= fatNeeded){
+        let proteinHeavyFoods = tempFoodObjects.filter((e) => {
+          return e.protein/(e.carbs + e.protein + e.fat) >= .3
+        })
+
+        //identify the carb heavy food with the lowest current quantity
+        let lowestQuantity, lowestQuantityFood
+        proteinHeavyFoods.forEach((e, i) => {
+          if(i == 0){
+            lowestQuantity = e.quantity
+            lowestQuantityFood = e.id
+          }
+          else{
+            if(e.quantity < lowestQuantity){
+              lowestQuantity = e.quantity
+              lowestQuantityFood = e.id
+            }
+          }
+        })
+
+        tempFoodObjects.map((e) => {
+          if(e.id == lowestQuantityFood){
+            e.quantity++
+            carbs += e.carbs
+            protein += e.protein
+            fat += e.fat
+          }
+        })
+      }
+
+      else if(fatNeeded >= carbsNeeded && fatNeeded >= proteinNeeded){
+        let fatHeavyFoods = tempFoodObjects.filter((e) => {
+          return e.fat/(e.carbs + e.protein + e.fat) >= .3
+        })
+
+        //identify the carb heavy food with the lowest current quantity
+        let lowestQuantity, lowestQuantityFood
+        fatHeavyFoods.forEach((e, i) => {
+          if(i == 0){
+            lowestQuantity = e.quantity
+            lowestQuantityFood = e.id
+          }
+          else{
+            if(e.quantity < lowestQuantity){
+              lowestQuantity = e.quantity
+              lowestQuantityFood = e.id
+            }
+          }
+        })
+
+        tempFoodObjects.map((e) => {
+          if(e.id == lowestQuantityFood){
+            e.quantity++
+            carbs += e.carbs
+            protein += e.protein
+            fat += e.fat
+          }
+        })
+      }
+
+    }
+
+    setFoodObjects((prevObjects) => {
+      return prevObjects.map((e, i) => {
+        e.quantity = tempFoodObjects[i].quantity;
+        return e;
+      });
+    });
+  };
+
+
   //handler for clicking the delete button on a food row.  This function reference is passed as a prop to the food component
   const clickDeleteHandler = (foodName) => {
     setFoodObjects((prevComponents) => {
@@ -298,7 +467,7 @@ const PlanningPage = (props) => {
             margin: '10px',
             padding: '2rem',
           }}
-          onClick={clickCalculateHandler}
+          onClick={clickCalculateHandler2}
         >
           Calculate
         </Button>
@@ -318,13 +487,13 @@ const PlanningPage = (props) => {
       <div className='card' style={{ padding: '2rem' }}>
         <b>Current:</b> &nbsp;&nbsp;&nbsp;
         <b>Calories:</b> &nbsp;{macros.currentCalories.toFixed(2)}&nbsp;&nbsp;
-        <b>Protien:</b> &nbsp;{macros.currentProtein.toFixed(2)}&nbsp;&nbsp;
+        <b>Protein:</b> &nbsp;{macros.currentProtein.toFixed(2)}&nbsp;&nbsp;
         <b>Carbs:</b> &nbsp;{macros.currentCarbs.toFixed(2)}&nbsp;&nbsp;
         <b>Fat:</b> &nbsp;{macros.currentFat.toFixed(2)}&nbsp;&nbsp;
         <br />
         <b>&nbsp;Target:</b>&nbsp;&nbsp;&nbsp;
         <b>&nbsp;Calories:</b> &nbsp;{props.calories}&nbsp;&nbsp;
-        <b>Protien:</b> &nbsp;{props.protein}&nbsp;&nbsp;
+        <b>Protein:</b> &nbsp;{props.protein}&nbsp;&nbsp;
         <b>Carbs:</b> &nbsp;{props.carbs}&nbsp;&nbsp;
         <b>Fat:</b> &nbsp;{props.fat}&nbsp;&nbsp;
         <br />
@@ -335,7 +504,7 @@ const PlanningPage = (props) => {
         <b>&nbsp;Diff:</b>&nbsp;&nbsp;&nbsp;
         <b>&nbsp;Calories:</b> &nbsp;{macros.diffCalories.toFixed(2)}
         &nbsp;&nbsp;
-        <b>Protien:</b> &nbsp;{macros.diffProtein.toFixed(2)}&nbsp;&nbsp;
+        <b>Protein:</b> &nbsp;{macros.diffProtein.toFixed(2)}&nbsp;&nbsp;
         <b>Carbs:</b> &nbsp;{macros.diffCarbs.toFixed(2)}&nbsp;&nbsp;
         <b>Fat:</b> &nbsp;{macros.diffFat.toFixed(2)}&nbsp;&nbsp;
         <br />
