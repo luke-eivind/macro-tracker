@@ -189,13 +189,15 @@ p {
 }
 .card {
   max-width: 90%;
-  background-color: seashell;
+  color: #ACBED7;
+  background-color: #ACBED7;
   padding: 1.5rem 1.5 1.5rem 1.5rem;
   margin: 100px auto;
-  border-radius: 3rem;
-  box-shadow: 0.5rem 0.5rem 0.5rem;
+  border-radius: 1rem;
+  box-shadow: 1rem;
   align-items: center;
-  outline: 0.5rem solid;
+  outline: 0.25rem solid;
+  outline-color: #000;
 }
 section {
   margin-top: 30px;
@@ -271,4 +273,8 @@ section {
 }
 .legend span {
   float: right;
+}
+
+.MuiOutlinedInput-root {
+  color: white
 }
