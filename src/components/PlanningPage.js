@@ -4,6 +4,7 @@ import './PlanningPage.css';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
 import axios from 'axios';
 import FoodList from './FoodList';
 import FoodObject from './FoodObject';
@@ -52,6 +53,7 @@ const PlanningPage = (props) => {
     });
   }, [foodObjects]);
 
+  //FOODSCARD
   const clickAddHandler = async () => {
     const requestUrl =
       'https://api.edamam.com/api/food-database/v2/parser?app_id=b295d5ab&app_key=423589a8b37bf61dcb13f405c1fb5e66&ingr=' +
@@ -95,7 +97,7 @@ const PlanningPage = (props) => {
         console.log(error);
       });
   };
-
+  //FOODSCARD
   const clickCalculateHandler = async () => {
     let tempFoodObjects = [];
 
@@ -239,6 +241,7 @@ const PlanningPage = (props) => {
     });
   };
 
+  //FOODSCARD
   //handler that gets called every time the content of the food input box is changed.  Calls the autocomplete api.
   const foodInputHandler = async (event) => {
     setInputText(event.target.value);
@@ -257,32 +260,14 @@ const PlanningPage = (props) => {
     setFoods(functionFoods);
   };
 
+  //FOODSCARD
   const autoCompleteHandler = (event, value) => {
     setInputText(value.name);
   };
 
   return (
-    <div>
-      <Typography variant='h1'>
-        Macro Tracker
-      </Typography>
+    <Container>
       <div className='input-box card'>
-        <Autocomplete
-          id='foods-autocomplete'
-          className='auto'
-          onChange={autoCompleteHandler}
-          options={foods}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label='Foods'
-              letiant='outlined'
-              onChange={foodInputHandler}
-            />
-          )}
-          getOptionLabel={(option) => option.name}
-          style={{ width: 270 }}
-        />
         <Button
           style={{
             background: 'orange',
@@ -344,7 +329,7 @@ const PlanningPage = (props) => {
         <b>Fat:</b> &nbsp;{macros.diffFat.toFixed(2)}&nbsp;&nbsp;
         <br />
       </div>
-    </div>
+    </Container>
   );
 };
 

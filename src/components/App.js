@@ -1,6 +1,7 @@
 import '../App.css';
 import LandingPage from './LandingPage';
 import PlanningPage from './PlanningPage';
+import MainPage from './MainPage';
 import { Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -33,6 +34,12 @@ function App() {
               fat={fat}
               protein={protein}
             />
+          }
+        />
+        <Route
+          path='main'
+          element={
+            <MainPage/>
           }
         />
       </Routes>
