@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import FoodList from './FoodList';
 import FoodObject from './FoodObject';
+import { Typography } from "@mui/material";
 
 const PlanningPage = (props) => {
   const [foods, setFoods] = useState([]);
@@ -262,7 +263,9 @@ const PlanningPage = (props) => {
 
   return (
     <div>
-      <h1>Macro Tracker</h1>
+      <Typography variant='h1'>
+        Macro Tracker
+      </Typography>
       <div className='input-box card'>
         <Autocomplete
           id='foods-autocomplete'
@@ -314,7 +317,8 @@ const PlanningPage = (props) => {
         </Button>
         
       </div>
-      <FoodList components={foodObjects.map((c) => c.component)}></FoodList>
+      {/*<FoodList components={foodObjects.map((c) => c.component)}></FoodList>*/}
+      <FoodList components={foodObjects}></FoodList>
       <div className='card' style={{ padding: '2rem' }}>
         <b>Current:</b> &nbsp;&nbsp;&nbsp;
         <b>Calories:</b> &nbsp;{macros.currentCalories.toFixed(2)}&nbsp;&nbsp;

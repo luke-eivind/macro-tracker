@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import {Container, Typography, Drawer} from "@mui/material";
 import Button from '@mui/material/Button';
 import $ from 'jquery';
 
@@ -79,15 +80,9 @@ export default function LandingPage(props) {
     }
     var offset = 0;
     var color = [
-      'orange',
-      'crimson',
-      'olivedrab',
-      'purple',
-      'tomato',
-      'turquoise',
-      'forestgreen',
-      'navy',
-      'gray',
+      '#020887',
+      '#334195',
+      '#647AA3',
     ];
     for (var i = 0; i < listData.length; i++) {
       var size = sliceSize(listData[i], listTotal);
@@ -134,7 +129,12 @@ export default function LandingPage(props) {
 
   return (
     <div>
-      <h1>Macro Tracker</h1>
+      <Typography variant='h1'>
+        Macro Tracker
+      </Typography>
+      <Drawer variant='persistent' anchor='left'>
+        hi
+      </Drawer>
       <div class='card'>
         <Box
           component='form'
@@ -192,18 +192,17 @@ export default function LandingPage(props) {
             </li>
           </ul>
         </section>
-        <Link to='/plan'>
-          <Button
-            className='btn-7'
-            onClick={props.clickNextHandler(calories, carbs, fat, protein)}
-          >
-            Next
-          </Button>
-        </Link>
+        {/*<Link to='/plan'>*/}
+              <Button variant='contained' onClick={props.clickNextHandler(calories, carbs, fat, protein)} sx={{
+                marginBottom: '20px'
+              }}>
+                Next
+              </Button>
+        {/*}</Link>*/}
       </div>
 
       <div class='bottom'>
-        <svg
+        {/*<svg
           class='waves'
           xmlns='http://www.w3.org/2000/svg'
           xmlnsXlink='http://www.w3.org/1999/xlink'
@@ -238,7 +237,7 @@ export default function LandingPage(props) {
             />
             <use xlinkHref='#gentle-wave' x='48' y='7' fill='#fff' />
           </g>
-        </svg>
+        </svg>*/}
       </div>
     </div>
   );
